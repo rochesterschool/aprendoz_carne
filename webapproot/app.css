@@ -1,0 +1,10 @@
+html.WMApp body .roundedImg {
+    border-radius: 50%;
+    background-color: darkgrey;
+    width: 194px !important;
+    border: 1.2499999813735487px solid;
+}
+
+
+
+

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<service xmlns="http://www.activegrid.com/namespaces/ServiceDefinitions/1.0" id="enviarDirNivel" class="enviarDirNivel" CRUDService="false" type="JavaService" springFile="enviarDirNivel.spring.xml">
+    <operation name="enviarNotificacionAlmuerzoDocentes">
+        <parameter name="motivo" typeRef="java.lang.String" isList="false"/>
+        <parameter name="alumno" typeRef="java.lang.String" isList="false"/>
+        <parameter name="correopadre" typeRef="java.lang.String" isList="false"/>
+        <parameter name="correomadre" typeRef="java.lang.String" isList="false"/>
+        <parameter name="fechahora" typeRef="java.lang.String" isList="false"/>
+        <return typeRef="java.lang.String" isList="false"/>
+    </operation>
+    <dataobjects/>
+</service>

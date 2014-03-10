@@ -1,0 +1,9 @@
+#main_fotoStd {
+    border-radius: 50%;
+    background-color: darkgrey;
+    width: 194px !important;
+}
+
+#main_peopledojoGrid1{
+    cursor: pointer;    
+}

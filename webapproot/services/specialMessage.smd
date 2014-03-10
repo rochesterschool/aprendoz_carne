@@ -1,0 +1,25 @@
+{
+	"methods": [{
+		"name": "enviarNotificacionAlmuerzo",
+		"operationType": null,
+		"parameters": [{
+			"name": "motivo",
+			"type": "java.lang.String"
+		}, {
+			"name": "alumno",
+			"type": "java.lang.String"
+		}, {
+			"name": "correopadre",
+			"type": "java.lang.String"
+		}, {
+			"name": "correomadre",
+			"type": "java.lang.String"
+		}, {
+			"name": "fechahora",
+			"type": "java.lang.String"
+		}],
+		"returnType": "java.lang.String"
+	}],
+	"serviceType": "JSON-RPC",
+	"serviceURL": "specialMessage.json"
+}

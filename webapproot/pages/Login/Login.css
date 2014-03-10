@@ -1,0 +1,30 @@
+.Login .Login-loginErrorMsg {
+	font-size: 12px; color: red
+}
+
+.Login .Login-wmTitle {
+    font-size: 20px;
+}
+
+.wmmobile .Login .wmeditor .wmlabel {
+    font-size: 16px;
+}
+
+.wmmobile .Login .wmeditor input {
+    font-size: 20px;
+}
+
+.Login div .rounded {
+    -webkit-border-radius: 8px;
+    -moz-border-radius: 8px;
+    border-radius: 8px;
+}
+
+#login_loginInputPanel {
+    background-color: #ffffff;
+}
+
+#login_loginMainPanel {
+    background-image: url(http://1.bp.blogspot.com/-yKMhSfjkF9M/UP79moZngFI/AAAAAAAAB-k/yPlWOcGVz-Q/s1600/6+Colegio+Rochester,+dise%C3%B1o+para+aprender.jpg);
+    background-size: cover;    
+}
