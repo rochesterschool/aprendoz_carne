@@ -22,9 +22,9 @@ import javax.mail.internet.*;
 import java.net.*;
 
 @ExposeToClient
-public class enviarDirNivel extends JavaServiceSuperClass {
-    public String enviarNotificacionAlmuerzoDocentes(String motivo, String [] destinatarios, String docente, String fechahora){
-    try{           
+public class admonSendMail extends JavaServiceSuperClass {
+     public String enviarNotificacionAlmuerzoDocentes(String motivo, String admon, String fechahora){
+     try{
             Properties props = new Properties();
             props.setProperty("mail.smtp.host", "smtp.gmail.com");
             props.setProperty("mail.smtp.starttls.enable", "true");
@@ -35,21 +35,17 @@ public class enviarDirNivel extends JavaServiceSuperClass {
             Session session = Session.getDefaultInstance(props);
             MimeMessage message = new MimeMessage(session);
             message.setFrom(new InternetAddress("eventualidades@rochester.edu.co"));   
-               String[] to = destinatarios;
-               InternetAddress[] addressTo = new InternetAddress[to.length];
-               for(int i = 0; i < to.length; i++){
-                  addressTo[i] = new InternetAddress(to[i]);
-               }
-               message.setRecipients(RecipientType.TO, addressTo); 
                message.addRecipient(
                   Message.RecipientType.TO, new InternetAddress("eventualidades@rochester.edu.co")); 
+               message.addRecipient(
+                  Message.RecipientType.TO, new InternetAddress("dmalba@rochester.edu.co"));      
             
             message.setSubject("No Reply - Registro y control de acceso.");
             message.setText(
               "<img src=\"http://www.rochester.edu.co/images/logo.png\">"+"<br/><br/>"+
               "REGISTRO Y CONTROL DE ACCESO - COLEGIO ROCHESTER<br/><br/>"+
-              "<b>Apreciado Director de Nivel:</b><br/>"+
-              "Queremos notificarle que el docente "+docente+" no presentó el carné en el ingreso/salida de las instalaciones del colegio en la fecha "+fechahora+".<br><br>"+
+              "<b>Apreciado Director Administrativo: </b><br/>"+
+              "Queremos notificarle que "+admon+" no presentó el carné en el ingreso/salida de las instalaciones del colegio en la fecha "+fechahora+".<br><br>"+
               "Motivo : "+motivo+"<br/><br/>"+
               "Agradecemos su atención,<br><br>"+           
               "Aprendoz Colegio Rochester","ISO-8859-1","html");          
@@ -59,7 +55,7 @@ public class enviarDirNivel extends JavaServiceSuperClass {
             t.close();      
         }catch (Exception e){
         e.printStackTrace();
-    }
-    return "ok";
+     }
+     return "ok";
    }     
 }

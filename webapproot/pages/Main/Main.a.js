@@ -25,18 +25,17 @@ var idgrupo= this.peopledojoGrid1.selectedItem.data.idgrupito;
 var tipopersona= this.peopledojoGrid1.selectedItem.data.idtipo;
 var tiposuceso= this.tipoSuceso.getDataValue();
 if(tiposuceso != 7){
-console.log(idpersona+" "+idgrupo);
 this.getParentsInfo.input.setValue("pgrupo", idgrupo);
 this.getParentsInfo.input.setValue("ppersona", idpersona);
 this.getParentsInfo.update();
 }
 if(tipopersona=== 1 && tiposuceso=== 7){
-console.log(idpersona+" "+idgrupo);
 this.getParentsInfo.input.setValue("pgrupo", idgrupo);
 this.getParentsInfo.input.setValue("ppersona", idpersona);
 this.getParentsInfo.update();
 }
 },
+// Using parents info for sending mail
 getParentsInfoSuccess: function(inSender, inDeprecated) {
 var json= main.getParentsInfo.getItem(0);
 var nombreCompleto= this.peopledojoGrid1.selectedItem.data.fullname;
@@ -73,9 +72,11 @@ alert("Operación cancelada.");
 }
 }
 },
+// peopledojoGrid1Select2 onSelection active the button
 peopledojoGrid1Select2: function(inSender) {
 this.Registrar_Suceso.enable();
 },
+// inserting data to log_ingresos_carne when Teachers / Admons
 Registrar_Suceso_teachersClick: function(inSender) {
 var idpersona= this.TeachersAdmonDojoGrid1.selectedItem.data.idpersona;
 var tipo= this.tipoSuceso1.getDataValue();
@@ -86,8 +87,13 @@ this.varInsertLog.setValue("fechaCreacion", now);
 this.insertLogForm2.setDataSet(this.varInsertLog);
 this.insertLogForm2.insertData();
 },
+// onClick Registrar_Suceso_teachers
 Registrar_Suceso_teachersClick1: function(inSender) {
+var idpersona= this.TeachersAdmonDojoGrid1.selectedItem.data.idpersona;
+this.mailTeachersAdmonsServiceVariable1.input.setValue("pdocente",idpersona);
+this.mailTeachersAdmonsServiceVariable1.update();
 },
+//
 TeachersAdmonDojoGrid1Select: function(inSender) {
 var id= main.TeachersAdmonDojoGrid1.selectedItem.data.numeroDocumento;
 var intCode= parseInt(id);
@@ -95,6 +101,35 @@ this.fotoAdmon.setSource("http://www.rochester.edu.co/fotosempleados/"+intCode+"
 },
 TeachersAdmonDojoGrid1Select1: function(inSender) {
 this.Registrar_Suceso_teachers.enable();
+},
+mailTeachersAdmonsServiceVariable1Success: function(inSender, inDeprecated) {
+var motivoCorreo= this.tipoSuceso1.getDisplayValue();
+var nombres= this.TeachersAdmonDojoGrid1.selectedItem.data.nombres;
+var apellidos= this.TeachersAdmonDojoGrid1.selectedItem.data.apellidos;
+var tipo= this.TeachersAdmonDojoGrid1.selectedItem.data.idtipo;
+var nombreCompleto= nombres+" "+apellidos;
+var fechaHora= this.dateTime2.getDisplayValue();
+var items= main.mailTeachersAdmonsServiceVariable1;
+var cont= main.mailTeachersAdmonsServiceVariable1.getCount();
+var correos = [];
+for(var i = 0; i<cont; i++){
+var _item= main.mailTeachersAdmonsServiceVariable1.getItem(i).data;
+var mail= _item.email;
+correos.push(mail);
+}
+if(tipo==7 || tipo==11 || tipo==13 || tipo==14 || tipo==16 || tipo==17 || tipo==18 || tipo==19  || tipo==20  || tipo==25){
+this.sendMailAdmons.input.setValue("motivo", motivoCorreo);
+this.sendMailAdmons.input.setValue("admon", nombreCompleto);
+this.sendMailAdmons.input.setValue("fechahora", fechaHora);
+this.sendMailAdmons.update();
+}
+if(tipo==4 || tipo==5 || tipo==6 || tipo==8 || tipo==10){
+this.sendMailTeachers.input.setValue("motivo", motivoCorreo);
+this.sendMailTeachers.input.setValue("destinatarios", correos);
+this.sendMailTeachers.input.setValue("docente", nombreCompleto);
+this.sendMailTeachers.input.setValue("fechahora", fechaHora);
+this.sendMailTeachers.update();
+}
 },
 _end: 0
 });
@@ -193,6 +228,15 @@ wire: ["wm.Wire", {"expression":undefined,"source":"searchBox_teachers.dataValue
 }]
 }]
 }],
+mailTeachersAdmonsServiceVariable1: ["wm.ServiceVariable", {"inFlightBehavior":"executeLast","operation":"getDirNivelInfo","service":"aprendoz_desarrolloDB"}, {"onSuccess":"mailTeachersAdmonsServiceVariable1Success"}, {
+input: ["wm.ServiceInput", {"type":"getDirNivelInfoInputs"}, {}]
+}],
+sendMailTeachers: ["wm.ServiceVariable", {"inFlightBehavior":"executeLast","operation":"enviarNotificacionAlmuerzoDocentes","service":"enviarDirNivel"}, {}, {
+input: ["wm.ServiceInput", {"type":"enviarNotificacionAlmuerzoDocentesInputs"}, {}]
+}],
+sendMailAdmons: ["wm.ServiceVariable", {"inFlightBehavior":"executeLast","operation":"enviarNotificacionAlmuerzoDocentes","service":"admonSendMail"}, {}, {
+input: ["wm.ServiceInput", {"type":"enviarNotificacionAlmuerzoDocentesInputs"}, {}]
+}],
 loadingDialog1: ["wm.LoadingDialog", {"caption":"Consultando información...","serviceVariableToTrack":["searchUsersDetails"]}, {}, {
 binding: ["wm.Binding", {}, {}, {
 wire: ["wm.Wire", {"expression":undefined,"source":"peopledojoGrid1","targetProperty":"widgetToCover"}, {}]
@@ -213,7 +257,7 @@ templateLogoutButton: ["wm.Button", {"_classes":{"domNode":["wm_FontSizePx_10px"
 }],
 breadcrumbLayers1: ["wm.TabLayers", {"styles":{}}, {}, {
 search_estudents: ["wm.Layer", {"border":"1","borderColor":"","caption":"Estudiantes","horizontalAlign":"left","padding":"10","styles":{},"themeStyleType":"ContentPanel","verticalAlign":"top"}, {}, {
-header_search: ["wm.Panel", {"height":"35px","horizontalAlign":"left","layoutKind":"left-to-right","styles":{"backgroundColor":"#d3d3d3"},"verticalAlign":"middle","width":"100%"}, {}, {
+header_search: ["wm.Panel", {"height":"35px","horizontalAlign":"left","layoutKind":"left-to-right","styles":{"backgroundColor":"#22a7f0"},"verticalAlign":"middle","width":"100%"}, {}, {
 searchBox: ["wm.Text", {"changeOnKey":true,"dataValue":undefined,"displayValue":"","height":"30px","placeHolder":"ingrese el nombre del alumno","styles":{},"width":"300px"}, {"onchange":"searchUsersDetails"}]
 }],
 content_students: ["wm.Panel", {"height":"100%","horizontalAlign":"left","verticalAlign":"top","width":"100%"}, {}, {
@@ -248,13 +292,13 @@ binding: ["wm.Binding", {}, {}, {
 wire: ["wm.Wire", {"expression":undefined,"source":"lsTipoSucesos","targetProperty":"dataSet"}, {}]
 }]
 }],
-dateTime1: ["wm.DateTime", {"caption":"Fecha y hora","captionAlign":"right","displayValue":"10/03/2014 11:28 a.m.","emptyValue":"emptyString","height":"30px","readonly":true,"width":"100%"}, {}, {
+dateTime1: ["wm.DateTime", {"caption":"Fecha y hora","captionAlign":"right","displayValue":"12/03/2014 07:24 a.m.","emptyValue":"emptyString","height":"30px","readonly":true,"styles":{},"width":"100%"}, {}, {
 binding: ["wm.Binding", {}, {}, {
 wire: ["wm.Wire", {"expression":"new Date().getTime()","targetProperty":"dataValue"}, {}]
 }]
 }],
 spacer1: ["wm.Spacer", {"height":"100%","width":"96px"}, {}],
-Registrar_Suceso: ["wm.Button", {"_classes":{"domNode":["Success"]},"border":"1","borderColor":"#51a351","caption":"Registrar","desktopHeight":"38px","disabled":true,"height":"38px"}, {"onclick":"Registrar_SucesoClick","onclick1":"Registrar_SucesoClick1"}]
+Registrar_Suceso: ["wm.Button", {"_classes":{"domNode":["Success"]},"border":"1","borderColor":"#22a7f0","caption":"Registrar","desktopHeight":"38px","disabled":true,"height":"38px","styles":{"backgroundColor":"#22a7f0"}}, {"onclick":"Registrar_SucesoClick","onclick1":"Registrar_SucesoClick1"}]
 }]
 }]
 }]
@@ -262,8 +306,8 @@ Registrar_Suceso: ["wm.Button", {"_classes":{"domNode":["Success"]},"border":"1"
 }]
 }],
 search_admon_teachers: ["wm.Layer", {"border":"1","borderColor":"","caption":"Docentes y Admons","horizontalAlign":"left","padding":"10","styles":{},"themeStyleType":"ContentPanel","verticalAlign":"top"}, {}, {
-header_search_teachers: ["wm.Panel", {"height":"35px","horizontalAlign":"left","layoutKind":"left-to-right","styles":{"backgroundColor":"#d3d3d3"},"verticalAlign":"middle","width":"100%"}, {}, {
-searchBox_teachers: ["wm.Text", {"caption":undefined,"changeOnKey":true,"dataValue":undefined,"displayValue":"","height":"30px","maxChars":"Docente o Administrativo","placeHolder":"Docente o Administrativo","styles":{},"width":"300px"}, {"onchange":"teachersAdmonsSearchSv"}]
+header_search_teachers: ["wm.Panel", {"height":"35px","horizontalAlign":"left","layoutKind":"left-to-right","styles":{"backgroundColor":"#00b16a"},"verticalAlign":"middle","width":"100%"}, {}, {
+searchBox_teachers: ["wm.Text", {"caption":undefined,"changeOnKey":true,"dataValue":undefined,"displayValue":"","height":"30px","maxChars":undefined,"placeHolder":"docente o administrativo","styles":{},"width":"300px"}, {"onchange":"teachersAdmonsSearchSv"}]
 }],
 content_teachers_admons: ["wm.Panel", {"height":"100%","horizontalAlign":"left","styles":{},"verticalAlign":"top","width":"100%"}, {}, {
 TeachersAdmonDojoGrid1: ["wm.DojoGrid", {"columns":[
@@ -271,11 +315,11 @@ TeachersAdmonDojoGrid1: ["wm.DojoGrid", {"columns":[
 {"show":false,"field":"idpersona","title":"Idpersona","width":"100%","align":"left","formatFunc":"","mobileColumn":false},
 {"show":true,"field":"nombres","title":"Nombres","width":"100%","align":"left","formatFunc":"","expression":"${apellidos}+\" \"+${nombres}","mobileColumn":false},
 {"show":false,"field":"apellidos","title":"Apellidos","width":"100%","align":"left","formatFunc":"","mobileColumn":false},
-{"show":true,"field":"tipo","title":"Rol","width":"100px","align":"left","formatFunc":"","mobileColumn":false},
+{"show":true,"field":"tipo","title":"Rol","width":"150px","align":"left","formatFunc":"","mobileColumn":false},
 {"show":false,"field":"idtipo","title":"Idtipo","width":"100%","align":"left","formatFunc":"","mobileColumn":false},
 {"show":false,"field":"PHONE COLUMN","title":"-","width":"100%","align":"left","expression":"\"<div class='MobileRowTitle'>\" +\n\"Código: \" + ${codigo} +\n\"</div>\"\n\n+ \"<div class='MobileRow'>\" +\n\"Nombres: \" + ${wm.runtimeId}.formatCell(\"nombres\", ${nombres}, ${this}, ${wm.rowId})\n + \"</div>\"\n\n+ \"<div class='MobileRow'>\" +\n\"Rol: \" + ${tipo}\n + \"</div>\"\n\n+ \"<div class='MobileRow'>\" +\n\"Tipo: \" + ${tipodocumento}\n + \"</div>\"\n\n+ \"<div class='MobileRow'>\" +\n\"No. documento: \" + ${numeroDocumento}\n + \"</div>\"\n\n","mobileColumn":true},
-{"show":true,"field":"tipodocumento","title":"Tipo","width":"100px","align":"left","formatFunc":"","mobileColumn":false},
-{"show":true,"field":"numeroDocumento","title":"No. documento","width":"100px","align":"left","formatFunc":"","mobileColumn":false}
+{"show":true,"field":"tipodocumento","title":"Tipo","width":"60px","align":"left","formatFunc":"","mobileColumn":false},
+{"show":true,"field":"numeroDocumento","title":"No. documento","width":"120px","align":"left","formatFunc":"","mobileColumn":false}
 ],"dsType":"com.aprendoz_desarrollodb.data.output.GetTeachersDetailsRtnType","height":"300px","margin":"0","minDesktopHeight":60,"singleClickEdit":true,"styles":{}}, {"onSelect":"TeachersAdmonDojoGrid1Select","onSelect1":"TeachersAdmonDojoGrid1Select1"}, {
 binding: ["wm.Binding", {}, {}, {
 wire: ["wm.Wire", {"expression":undefined,"source":"teachersAdmonsSearchSv","targetProperty":"dataSet"}, {}]
@@ -292,7 +336,7 @@ binding: ["wm.Binding", {}, {}, {
 wire: ["wm.Wire", {"expression":undefined,"source":"lsTipoSucesos","targetProperty":"dataSet"}, {}]
 }]
 }],
-dateTime2: ["wm.DateTime", {"caption":"Fecha y hora","captionAlign":"right","displayValue":"10/03/2014 11:45 a.m.","emptyValue":"emptyString","height":"30px","readonly":true,"width":"100%"}, {}, {
+dateTime2: ["wm.DateTime", {"caption":"Fecha y hora","captionAlign":"right","displayValue":"12/03/2014 07:24 a.m.","emptyValue":"emptyString","height":"30px","readonly":true,"width":"100%"}, {}, {
 binding: ["wm.Binding", {}, {}, {
 wire: ["wm.Wire", {"expression":"new Date().getTime()","targetProperty":"dataValue"}, {}]
 }]
@@ -316,6 +360,19 @@ background-color: darkgrey;\
 width: 194px !important;\
 }\
 #main_peopledojoGrid1{\
+cursor: pointer;\
+}\
+#main_breadcrumbLayers1_decorator_button2 {\
+background-color: #00B16A;\
+border: none;\
+color: #fff;\
+}\
+#main_breadcrumbLayers1_decorator_button1 {\
+background-color: #22A7F0;\
+border: none;\
+color: #FFF;\
+}\
+#main_TeachersAdmonDojoGrid1{\
 cursor: pointer;\
 }\
 ';

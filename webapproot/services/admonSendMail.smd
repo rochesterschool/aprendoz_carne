@@ -6,10 +6,7 @@
 			"name": "motivo",
 			"type": "java.lang.String"
 		}, {
-			"name": "destinatarios",
-			"type": "[java.lang.String]"
-		}, {
-			"name": "docente",
+			"name": "admon",
 			"type": "java.lang.String"
 		}, {
 			"name": "fechahora",
@@ -18,5 +15,5 @@
 		"returnType": "java.lang.String"
 	}],
 	"serviceType": "JSON-RPC",
-	"serviceURL": "enviarDirNivel.json"
+	"serviceURL": "admonSendMail.json"
 }

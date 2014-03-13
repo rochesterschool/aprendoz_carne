@@ -20196,7 +20196,7 @@ dojo.declare("aprendoz_carne", wm.Application, {
 	"name": "", 
 	"phoneGapLoginPage": "Login", 
 	"phoneMain": "", 
-	"projectSubVersion": "Alpha8", 
+	"projectSubVersion": "Alpha9", 
 	"projectVersion": 1, 
 	"sessionExpirationHandler": "nothing", 
 	"studioVersion": "6.6.0.RELEASE", 

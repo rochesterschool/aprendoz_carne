@@ -7,3 +7,19 @@
 #main_peopledojoGrid1{
     cursor: pointer;    
 }
+
+#main_breadcrumbLayers1_decorator_button2 {
+    background-color: #00B16A;
+    border: none;
+    color: #fff;
+}
+
+#main_breadcrumbLayers1_decorator_button1 {
+    background-color: #22A7F0;
+    border: none;
+    color: #FFF;
+}
+
+#main_TeachersAdmonDojoGrid1{
+    cursor: pointer;    
+}
